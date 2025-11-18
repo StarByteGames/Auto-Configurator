@@ -1,0 +1,107 @@
+{
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "categories": [
+    "Other"
+  ],
+  "contributes": {
+    "commands": [],
+    "configuration": {
+      "properties": {
+        "autoConfigurator.files": {
+          "description": "List of files (with content) to ensure exist in the workspace root or subfolders. Example usage:\n\n  \"autoConfigurator.files\": [\n    {\n      \"path\": \".csharpierrc\",\n      \"content\": \"{\\\"printWidth\\\": 120}\",\n      \"rules\": [\n        { \"type\": \"fileExistsGlob\", \"value\": \"**/*.csproj\" }\n      ]\n    },\n    {\n      \"path\": \".gitignore\",\n      \"content\": \"\\\\n.csharpierrc\",\n      \"append\": true,\n      \"rules\": [\n        { \"type\": \"fileExistsGlob\", \"value\": \".csharpierrc\" }\n      ]\n    }\n  ]\n\nEach object should have a 'path' (relative file path, can include folders), optional 'content' (string to write if the file is created or appended), optional 'append' (if true, append content), and optional 'rules' (array of rule objects). If 'rules' is omitted, the file is always created/appended if missing. Supported rule types: 'fileNotExists', 'envVarSet', 'fileExistsGlob', 'folderExists', 'settingEquals', 'fileContains', 'workspaceName'. No files are created unless you specify them here.",
+          "items": {
+            "properties": {
+              "content": {
+                "default": "",
+                "description": "Initial content for the file (if created)",
+                "type": "string"
+              },
+              "path": {
+                "description": "File path (relative to workspace root, can include folders)",
+                "type": "string"
+              },
+              "append": {
+                "description": "If true, append content to the file instead of overwriting.",
+                "type": "boolean",
+                "default": false
+              },
+              "rules": {
+                "description": "Optional rules that must be met for the file to be created. If omitted, file is always created if missing. Supported rule types: 'fileNotExists', 'envVarSet', 'fileExistsGlob', 'folderExists', 'settingEquals', 'fileContains', 'workspaceName'. 'fileExistsGlob' checks if any file matching the glob exists in the workspace (e.g., '*.csproj'). 'folderExists' checks for a folder, 'settingEquals' checks a VS Code setting, 'fileContains' checks if a file contains a string, 'workspaceName' matches the workspace folder name.",
+                "items": {
+                  "properties": {
+                    "type": {
+                      "description": "Rule type (e.g., 'fileNotExists', 'envVarSet', etc.)",
+                      "type": "string"
+                    },
+                    "value": {
+                      "description": "Value for the rule (e.g., file name, env var name, etc.)",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "value"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "path"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        }
+      },
+      "title": "Auto Configurator",
+      "type": "object"
+    }
+  },
+  "description": "Automatically configures project settings and environment for optimal development in VS Code.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/StarByteGames/Auto-Configurator.git"
+  },
+  "bugs": {
+    "url": "https://github.com/StarByteGames/Auto-Configurator/issues"
+  },
+  "homepage": "https://github.com/StarByteGames/Auto-Configurator#readme",
+  "devDependencies": {
+    "@types/mocha": "^10.0.10",
+    "@types/node": "22.x",
+    "@types/vscode": "^1.106.0",
+    "@vscode/test-cli": "^0.0.12",
+    "@vscode/test-electron": "^2.5.2",
+    "eslint": "^9.39.1",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.46.3"
+  },
+  "displayName": "Auto Configurator",
+  "engines": {
+    "vscode": "^1.106.0"
+  },
+  "main": "./out/extension.js",
+  "name": "auto-configurator",
+  "scripts": {
+    "compile": "tsc -p ./",
+    "lint": "eslint src",
+    "pretest": "npm run compile && npm run lint",
+    "test": "vscode-test",
+    "vscode:prepublish": "npm run compile",
+    "watch": "tsc -watch -p ./"
+  },
+  "version": "0.0.1",
+  "license": "MIT",
+  "author": "DevStarByte",
+  "keywords": [
+    "vscode",
+    "extension",
+    "configuration",
+    "automation",
+    "project setup"
+  ]
+}
