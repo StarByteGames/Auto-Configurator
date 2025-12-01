@@ -27,6 +27,11 @@
                 "type": "boolean",
                 "default": false
               },
+              "createIfNotExist": {
+                "description": "If true and 'append' is set, the file will be created and written if it does not exist. If false, append will only work if the file already exists.",
+                "type": "boolean",
+                "default": false
+              },
               "rules": {
                 "description": "Optional rules that must be met for the file to be created. If omitted, file is always created if missing. Supported rule types: 'fileNotExists', 'envVarSet', 'fileExistsGlob', 'folderExists', 'settingEquals', 'fileContains', 'workspaceName'. 'fileExistsGlob' checks if any file matching the glob exists in the workspace (e.g., '*.csproj'). 'folderExists' checks for a folder, 'settingEquals' checks a VS Code setting, 'fileContains' checks if a file contains a string, 'workspaceName' matches the workspace folder name.",
                 "items": {
@@ -81,6 +86,8 @@
     "typescript-eslint": "^8.46.3"
   },
   "displayName": "Auto Configurator",
+  "icon": "icon.png",
+  "publisher": "StarByteGames",
   "engines": {
     "vscode": "^1.106.0"
   },
@@ -94,9 +101,9 @@
     "vscode:prepublish": "npm run compile",
     "watch": "tsc -watch -p ./"
   },
-  "version": "0.0.1",
+  "version": "1.1.0",
   "license": "MIT",
-  "author": "DevStarByte",
+  "author": "DevStarByte starcrusher202@gmail.com",
   "keywords": [
     "vscode",
     "extension",

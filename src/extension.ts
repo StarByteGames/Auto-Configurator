@@ -19,6 +19,7 @@ const files: {
   path: string;
   content?: string;
   append?: boolean;
+  createIfNotExist?: boolean;
   rules?: { type: string; value: string }[];
 }[] = config.get("files", []);
 const workspaceRoot = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
@@ -164,7 +165,6 @@ async function ensureFiles() {
       }
       if (shouldCreate && !fs.existsSync(absFile)) {
         try {
-          // Ensure directory exists
           const dir = path.dirname(absFile);
           if (!fs.existsSync(dir)) {
             fs.mkdirSync(dir, { recursive: true });
@@ -172,19 +172,13 @@ async function ensureFiles() {
             log(`[Files] Created directory: ${dir}`);
           }
           if (file.append) {
-            let shouldAppend = true;
-            if (fs.existsSync(absFile)) {
-              const existing = fs.readFileSync(absFile, "utf8");
-              if (file.content && existing.includes(file.content)) {
-                shouldAppend = false;
-                outputChannel.appendLine(`[Files] Content already present in file: ${absFile}`);
-                log(`[Files] Content already present in file: ${absFile}`);
-              }
-            }
-            if (shouldAppend) {
-              fs.appendFileSync(absFile, file.content ?? "", { encoding: "utf8" });
-              outputChannel.appendLine(`[Files] Appended to file: ${absFile}`);
-              log(`[Files] Appended to file: ${absFile}`);
+            if (file.createIfNotExist) {
+              fs.writeFileSync(absFile, file.content ?? "", { encoding: "utf8" });
+              outputChannel.appendLine(`[Files] Created file (append+createIfNotExist): ${absFile}`);
+              log(`[Files] Created file (append+createIfNotExist): ${absFile}`);
+            } else {
+              outputChannel.appendLine(`[Files] Skipped append: file does not exist and createIfNotExist is false: ${absFile}`);
+              log(`[Files] Skipped append: file does not exist and createIfNotExist is false: ${absFile}`);
             }
           } else {
             fs.writeFileSync(absFile, file.content ?? "", { encoding: "utf8" });
